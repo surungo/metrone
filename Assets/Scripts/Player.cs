@@ -5,11 +5,18 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float maxSpeed;
+    public Transform groundCheck;
+    public float jumpForce;
 
     private float speed;
     private Rigidbody2D rb;
     private bool facingRight = true;
-    
+    private bool onGround = true;
+    private bool jump = false;
+    private bool doubleJump;
+   
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +27,19 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        onGround = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
+        if (onGround)
+            doubleJump = false;
         
+        if (Input.GetButtonDown("Jump") && (onGround || !doubleJump))
+        {
+            jump = true;
+            if(!onGround && !doubleJump)
+            {
+                doubleJump = true;
+            }
+        }
+
     }
 
     void FixedUpdate()
@@ -35,6 +54,12 @@ public class Player : MonoBehaviour
         }else if (h < 0 && facingRight)
         {
             Flip();
+        }
+        if (jump)
+        {
+            rb.velocity = Vector2.zero;
+            rb.AddForce(Vector2.up * jumpForce);
+            jump = false;
         }
 
     }
