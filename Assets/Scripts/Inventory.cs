@@ -7,7 +7,8 @@ public class Inventory : MonoBehaviour
     public static Inventory inventory;
     public List<Weapon> weapons;
     public List<Key> keys;
-    
+    public List<ConsumerItem> items;
+
 
     void Awake()
     {
@@ -37,7 +38,7 @@ public class Inventory : MonoBehaviour
     {
         for (int i = 0; i < keys.Count; i++)
         {
-            if(keys[i] == key)
+            if (keys[i] == key)
             {
                 return true;
             }
@@ -45,4 +46,21 @@ public class Inventory : MonoBehaviour
         return false;
     }
 
+    public void AddItem(ConsumerItem item)
+    {
+        items.Add(item);
+    }
+
+    public void RemoveItem(ConsumerItem item)
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i] == item)
+            {
+                items.RemoveAt(i);
+                return;
+            }
+        }
+       
+    }
 }

@@ -8,6 +8,9 @@ public class Player : MonoBehaviour
     public Transform groundCheck;
     public float jumpForce;
     public float fireRate;
+    public ConsumerItem item;
+    public int maxHealth;
+    public int maxMana;
     
     private float speed;
     private Rigidbody2D rb;
@@ -19,8 +22,8 @@ public class Player : MonoBehaviour
     private Animator anim;
     private Attack attack;
     private float nextAttack;
-
-
+    public int health;
+    public int mana;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +56,12 @@ public class Player : MonoBehaviour
             anim.SetTrigger("Attack");
             attack.PlayAnimation(weaponEquipped.animation);
             nextAttack = Time.time + fireRate;
+        }
+
+        if (Input.GetButtonDown("Fire3"))
+        {
+            UseItem(item);
+            Inventory.inventory.RemoveItem(item);
         }
 
     }
@@ -92,5 +101,20 @@ public class Player : MonoBehaviour
     {
         weaponEquipped = weapon;
         attack.SetWeapon(weaponEquipped.damage);
+    }
+
+    public void UseItem(ConsumerItem item)
+    {
+        health += item.healthGain;
+        if (health > maxHealth)
+        {
+            health = maxHealth;
+        }
+
+        mana += item.manaGain;
+        if (mana > maxMana)
+        {
+            mana = maxMana;
+        }
     }
 }
